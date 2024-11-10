@@ -1,0 +1,30 @@
+{
+  "name": "cookbook",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "prestart": "rm -rf dist && npm run build",
+    "start": "node dist/server.js",
+    "dev": "npm run server & npm run client",
+    "server": "tsc -w & node --env-file=.env --watch dist/server.js",
+    "client": "npm run dev --prefix ./client"
+  },
+  "keywords": [],
+  "author": "Jason Thompson <jason@jasont.us>",
+  "license": "ISC",
+  "packageManager": "pnpm@9.7.0+sha512.dc09430156b427f5ecfc79888899e1c39d2d690f004be70e05230b72cb173d96839587545d09429b55ac3c429c801b4dc3c0e002f653830a420fa2dd4e3cf9cf",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.21.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.8.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.9.0",
+    "typescript": "^5.6.3"
+  }
+}
