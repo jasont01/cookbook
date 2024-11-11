@@ -1,7 +1,5 @@
 import jwt from 'jsonwebtoken'
 
-//const Session = require('../models/sessionModel')
-
 // export const verifyRefreshToken = async (req, res, next) => {
 //   if (!req.cookies.token) return res.sendStatus(204)
 
@@ -29,8 +27,6 @@ export const verifyAccessToken = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
-
-    //req.session = await Session.getSession(decoded.session)
 
     next()
   } catch (error) {
