@@ -1,35 +1,59 @@
-import jwt from 'jsonwebtoken'
+import { NextFunction, Request, Response } from 'express'
+import jwt, { JwtPayload } from 'jsonwebtoken'
 
-// export const verifyRefreshToken = async (req, res, next) => {
-//   if (!req.cookies.token) return res.sendStatus(204)
+export interface ExtendedRequest extends Request {
+  token: string | JwtPayload
+}
 
-//   const token = req.cookies.token
+interface ExtendedJwt extends JwtPayload {
+  userId: string
+}
+export const verifyRefreshToken = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const token = req.cookies?.token
 
-//   const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress.split(':').pop()
+  if (token) {
+    try {
+      const decoded = jwt.verify(
+        token,
+        process.env.REFRESH_TOKEN_SECRET
+      ) as ExtendedRequest
 
-//   try {
-//     const decoded = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET)
+      const { userId } = decoded.token as ExtendedJwt
 
-//     const session = await Session.getSession(decoded.session)
+      next(userId)
+    } catch (error) {
+      res.status(403).json({ error: error.message })
+    }
+  } else {
+    res.sendStatus(204)
+  }
+}
 
-//     req.session = await Session.updateSession(session._id, ip)
+export const verifyAccessToken = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const token = req.header('Authorization')?.replace('Bearer ', '')
 
-//     next()
-//   } catch (error) {
-//     return res.status(403).json({ error: error.message })
-//   }
-// }
+  if (token) {
+    try {
+      const decoded = jwt.verify(
+        token,
+        process.env.ACCESS_TOKEN_SECRET
+      ) as ExtendedRequest
 
-export const verifyAccessToken = async (req, res, next) => {
-  if (!req.headers.authorization) return res.sendStatus(401)
+      const { userId } = decoded.token as ExtendedJwt
 
-  const token = req.headers.authorization.split(' ')[1]
-
-  try {
-    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
-
-    next()
-  } catch (error) {
-    return res.status(403).json({ error: error.message })
+      next(userId)
+    } catch (error) {
+      res.status(403).json({ error: error.message })
+    }
+  } else {
+    res.sendStatus(401)
   }
 }

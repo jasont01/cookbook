@@ -13,12 +13,6 @@ const recipeSchema = new mongoose.Schema(
     },
   },
   {
-    methods: {
-      updateRecipe() {
-        //TODO updateRecipe
-      },
-      //TODO deleteRecipe
-    },
     statics: {
       createRecipe(title, ingredients, directions, photoURL, userId) {
         //TODO data validation
@@ -30,6 +24,8 @@ const recipeSchema = new mongoose.Schema(
       getAll(userId) {
         return this.find({ userId })
       },
+      //TODO updateRecipe
+      //TODO deleteRecipe
     },
   }
 )
