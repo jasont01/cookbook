@@ -8,12 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@types/bcryptjs':
-        specifier: ^2.4.6
-        version: 2.4.6
-      '@types/cookie-parser':
-        specifier: ^1.4.7
-        version: 1.4.7
       bcryptjs:
         specifier: ^2.4.3
         version: 2.4.3
@@ -30,6 +24,12 @@ importers:
         specifier: ^8.8.1
         version: 8.8.1
     devDependencies:
+      '@types/bcryptjs':
+        specifier: ^2.4.6
+        version: 2.4.6
+      '@types/cookie-parser':
+        specifier: ^1.4.7
+        version: 1.4.7
       '@types/express':
         specifier: ^5.0.0
         version: 5.0.0
