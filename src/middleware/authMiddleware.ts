@@ -2,14 +2,11 @@ import { NextFunction, Request, Response } from 'express'
 import jwt, { JwtPayload } from 'jsonwebtoken'
 
 export interface ExtendedRequest extends Request {
-  token: string | JwtPayload
-}
-
-interface ExtendedJwt extends JwtPayload {
   userId: string
 }
+
 export const verifyRefreshToken = async (
-  req: Request,
+  req: ExtendedRequest,
   res: Response,
   next: NextFunction
 ) => {
@@ -20,11 +17,13 @@ export const verifyRefreshToken = async (
       const decoded = jwt.verify(
         token,
         process.env.REFRESH_TOKEN_SECRET
-      ) as ExtendedRequest
+      ) as JwtPayload
 
-      const { userId } = decoded.token as ExtendedJwt
+      const { userId } = decoded
 
-      next(userId)
+      req.userId = userId
+
+      next()
     } catch (error) {
       res.status(403).json({ error: error.message })
     }
@@ -34,7 +33,7 @@ export const verifyRefreshToken = async (
 }
 
 export const verifyAccessToken = async (
-  req: Request,
+  req: ExtendedRequest,
   res: Response,
   next: NextFunction
 ) => {
@@ -45,11 +44,13 @@ export const verifyAccessToken = async (
       const decoded = jwt.verify(
         token,
         process.env.ACCESS_TOKEN_SECRET
-      ) as ExtendedRequest
+      ) as JwtPayload
 
-      const { userId } = decoded.token as ExtendedJwt
+      const { userId } = decoded
 
-      next(userId)
+      req.userId = userId
+
+      next()
     } catch (error) {
       res.status(403).json({ error: error.message })
     }

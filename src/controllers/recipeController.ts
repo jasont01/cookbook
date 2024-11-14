@@ -6,11 +6,7 @@ import Recipe from '../models/recipeModel.js'
  * @desc    New Recipe
  * @route   POST /api/recipe/
  */
-export const createRecipe = async (
-  req: ExtendedRequest,
-  res: Response,
-  userId: string
-) => {
+export const createRecipe = async (req: ExtendedRequest, res: Response) => {
   const { title, ingredients, directions, photoURL } = req.body
 
   try {
@@ -19,7 +15,7 @@ export const createRecipe = async (
       ingredients,
       directions,
       photoURL,
-      userId
+      req.userId
     )
     res.status(201).json(recipe)
   } catch (error) {
@@ -31,13 +27,9 @@ export const createRecipe = async (
  * @desc    Get All Recipes
  * @route   GET /api/recipe/
  */
-export const getAllRecipes = async (
-  req: ExtendedRequest,
-  res: Response,
-  userId: string
-) => {
+export const getAllRecipes = async (req: ExtendedRequest, res: Response) => {
   try {
-    const recipes = await Recipe.getAll(userId)
+    const recipes = await Recipe.getAll(req.userId)
     res.status(201).json(recipes)
   } catch (error) {
     res.status(400).json({ error: error.message })

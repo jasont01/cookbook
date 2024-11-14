@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken'
 import { Request, Response, CookieOptions } from 'express'
 import User from '../models/userModel.js'
+//import { ResponseUser } from '../types/response.js'
 
 const cookieOptions: CookieOptions = {
   maxAge: 180 * 24 * 60 * 60 * 1000, // 180 days
